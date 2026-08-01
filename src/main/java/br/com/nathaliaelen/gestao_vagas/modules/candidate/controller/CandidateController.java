@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.nathaliaelen.gestao_vagas.exceptions.ErrorMessageDTO;
 import br.com.nathaliaelen.gestao_vagas.modules.candidate.dto.CandidateRequestDTO;
-import br.com.nathaliaelen.gestao_vagas.modules.candidate.dto.CandidateResponseDTO;
+import br.com.nathaliaelen.gestao_vagas.modules.candidate.exception.UserFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -24,10 +25,16 @@ public class CandidateController {
   }
 
   @PostMapping
-  public ResponseEntity<CandidateResponseDTO> create(@RequestBody @Valid CandidateRequestDTO candidateRequestDTO) {
-    var candidateSaved = candidateService.create(candidateRequestDTO);
+  public ResponseEntity<?> create(@RequestBody @Valid CandidateRequestDTO candidateRequestDTO) {
+    
+    try {
+      var candidateSaved = candidateService.create(candidateRequestDTO);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(candidateSaved);
+      return ResponseEntity.status(HttpStatus.CREATED).body(candidateSaved);
+    } catch (UserFoundException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDTO(e.getMessage(), null));
+    }
+    
   }
   
 }
