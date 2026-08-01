@@ -1,5 +1,6 @@
 package br.com.nathaliaelen.gestao_vagas.modules.candidate.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.nathaliaelen.gestao_vagas.modules.candidate.dto.CandidateRequestDTO;
@@ -12,9 +13,11 @@ import br.com.nathaliaelen.gestao_vagas.modules.candidate.repository.CandidateRe
 public class CandidateService {
 
   private final CandidateRepository candidateRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  public CandidateService(CandidateRepository candidateRepository) {
+  public CandidateService(CandidateRepository candidateRepository, PasswordEncoder passwordEncoder) {
     this.candidateRepository = candidateRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public CandidateResponseDTO create(CandidateRequestDTO dto) {
@@ -34,6 +37,10 @@ public class CandidateService {
     candidate.setPassword(dto.password());
     candidate.setDescription(dto.description());
     candidate.setCurriculum(dto.curriculum());
+
+    // encode da senha
+    var password = passwordEncoder.encode(candidate.getPassword());
+    candidate.setPassword(password);
 
     // Apos criar a Entity, consigo usar o Repository para salvar o candidato
     var candidateSaved = candidateRepository.save(candidate);

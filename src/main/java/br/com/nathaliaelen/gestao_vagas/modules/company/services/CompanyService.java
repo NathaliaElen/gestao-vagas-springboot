@@ -1,5 +1,6 @@
 package br.com.nathaliaelen.gestao_vagas.modules.company.services;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.nathaliaelen.gestao_vagas.modules.company.dtos.CompanyRequestDTO;
@@ -12,9 +13,11 @@ import br.com.nathaliaelen.gestao_vagas.modules.company.repositories.CompanyRepo
 public class CompanyService {
 
   private final CompanyRepository companyRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  public CompanyService(CompanyRepository companyRepository) {
+  public CompanyService(CompanyRepository companyRepository, PasswordEncoder passwordEncoder) {
     this.companyRepository = companyRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   // criar uma company
@@ -36,6 +39,10 @@ public class CompanyService {
     company.setPassword(dto.password());
     company.setWebsite(dto.website());
     company.setDescription(dto.description());
+
+     // encode da senha
+     var password = passwordEncoder.encode(company.getPassword());
+     company.setPassword(password);
 
     // Apos criar a Entity, consigo usar o Repository para salvar a company
     var companySaved = companyRepository.save(company);
