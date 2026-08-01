@@ -18,6 +18,7 @@ public record JobRequestDTO(
           
   @NotNull(message = "O campo [level] é obrigatório.")
     JobLevel level,
-    
+      
+  @NotNull(message = "O campo [companyId] é obrigatório.")
     UUID companyId
 ) {}
