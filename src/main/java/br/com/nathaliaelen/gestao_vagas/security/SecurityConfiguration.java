@@ -10,8 +10,15 @@ public class SecurityConfiguration {
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    // desabilitar o spring security, para que eu configure como eu quero
-    http.csrf(csrf -> csrf.disable());
+    
+    http.csrf(csrf -> csrf.disable())
+        
+    .authorizeHttpRequests(auth -> {
+          auth.requestMatchers("/candidate").permitAll()
+          .requestMatchers("/company").permitAll()
+              .anyRequest().authenticated();
+        });
+    
     return http.build();
   }
   
