@@ -1,5 +1,7 @@
 package br.com.nathaliaelen.gestao_vagas.modules.company.dtos;
 
+import java.util.UUID;
+
 import org.hibernate.validator.constraints.Length;
 
 import br.com.nathaliaelen.gestao_vagas.modules.company.enums.JobLevel;
@@ -15,5 +17,7 @@ public record JobRequestDTO(
     String benefits,
           
   @NotNull(message = "O campo [level] é obrigatório.")
-    JobLevel level
+    JobLevel level,
+    
+    UUID companyId
 ) {}

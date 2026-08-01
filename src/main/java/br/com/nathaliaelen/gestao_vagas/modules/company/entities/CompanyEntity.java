@@ -1,6 +1,7 @@
 package br.com.nathaliaelen.gestao_vagas.modules.company.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,5 +55,8 @@ public class CompanyEntity {
   @CreationTimestamp
   @Column(updatable = false, nullable = false, name = "create_at")
   private LocalDateTime createAt;
+
+  @OneToMany(mappedBy = "companyEntity") // uma company (pode ter) para muitos jobs
+  private List<JobEntity> jobs;
   
 }

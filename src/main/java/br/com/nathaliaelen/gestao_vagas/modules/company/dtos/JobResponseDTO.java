@@ -10,5 +10,6 @@ public record JobResponseDTO(
   String description,
   String benefits,
   JobLevel level,
+  UUID companyId,
   LocalDateTime createAt
 ) {}
