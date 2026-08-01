@@ -32,7 +32,7 @@ public record CompanyRequestDTO(
   @Length(min = 8, max = 100, message = "O campo [password] deve conter entre (8) e (100) caracteres.")
     String password,
       
-  @URL(protocol = "http", message = "Website inválido.")
+  @URL(protocol = "https", message = "Website inválido.")
   @Length(max = 255, message = "O campo [website] deve conter no máximo (255) caracteres.")
     String website,
       
