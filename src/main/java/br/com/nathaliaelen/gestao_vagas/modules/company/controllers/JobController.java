@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.nathaliaelen.gestao_vagas.exceptions.ErrorMessageDTO;
 import br.com.nathaliaelen.gestao_vagas.modules.company.dtos.JobRequestDTO;
 import br.com.nathaliaelen.gestao_vagas.modules.company.exceptions.CompanyNotFoundException;
+import br.com.nathaliaelen.gestao_vagas.modules.company.exceptions.JobFoundException;
 import br.com.nathaliaelen.gestao_vagas.modules.company.services.JobService;
 import jakarta.validation.Valid;
 
@@ -30,9 +31,12 @@ public class JobController {
       var jobSaved = jobService.create(jobRequestDTO);
 
       return ResponseEntity.status(HttpStatus.CREATED).body(jobSaved);
-
+      
     } catch (CompanyNotFoundException e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDTO(e.getMessage(), null));
+    } catch (JobFoundException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+      .body(new ErrorMessageDTO(e.getMessage(), null));
     }
     
   }

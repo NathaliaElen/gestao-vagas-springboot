@@ -45,11 +45,8 @@ public class JobEntity {
   private JobLevel level;
 
   @ManyToOne // muitos jobs para uma company
-  @JoinColumn(name = "company_id", insertable = false, updatable = false) // foreign key
+  @JoinColumn(name = "company_id", nullable = false) // foreign key
   private CompanyEntity companyEntity;
-
-  @Column(nullable = false, name = "company_id")
-  private UUID companyId;
 
   @CreationTimestamp
   @Column(updatable = false, nullable = false, name = "create_at")

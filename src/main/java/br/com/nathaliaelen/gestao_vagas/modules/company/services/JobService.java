@@ -6,6 +6,7 @@ import br.com.nathaliaelen.gestao_vagas.modules.company.dtos.JobRequestDTO;
 import br.com.nathaliaelen.gestao_vagas.modules.company.dtos.JobResponseDTO;
 import br.com.nathaliaelen.gestao_vagas.modules.company.entities.JobEntity;
 import br.com.nathaliaelen.gestao_vagas.modules.company.exceptions.CompanyNotFoundException;
+import br.com.nathaliaelen.gestao_vagas.modules.company.exceptions.JobFoundException;
 import br.com.nathaliaelen.gestao_vagas.modules.company.repositories.CompanyRepository;
 import br.com.nathaliaelen.gestao_vagas.modules.company.repositories.JobRepository;
 
@@ -21,11 +22,22 @@ public class JobService {
   }
 
   public JobResponseDTO create(JobRequestDTO dto) {
-
+    
+    // só posso criar um job, se ele tiver um companyId válido vinculado
     var company = companyRepository.findById(dto.companyId());
 
     if (company.isEmpty()) {
       throw new CompanyNotFoundException();
+    }
+    
+    // impedir que a mesma empresa cadastre a mesma vaga duas vezes
+    var jobExists = jobRepository.findByDescriptionAndLevelAndCompanyEntity_Id(
+        dto.description(),
+        dto.level(),
+        dto.companyId());
+
+    if (jobExists.isPresent()) {
+      throw new JobFoundException();
     }
 
     // Criando a entity a partir do DTO
