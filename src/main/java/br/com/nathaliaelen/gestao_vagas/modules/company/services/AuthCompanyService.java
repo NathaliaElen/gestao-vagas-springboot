@@ -1,5 +1,8 @@
 package br.com.nathaliaelen.gestao_vagas.modules.company.services;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,7 @@ public class AuthCompanyService {
     // Se for igual -> Gerar o Token
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT.create().withIssuer("javagas")
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
         .withSubject(companyExists.getId().toString())
         .sign(algorithm);
     
